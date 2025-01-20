@@ -3,74 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Facts App</title>
+    <title>Historical Facts</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f4f4f4;
             margin: 0;
+            padding: 20px;
         }
-
-        #app {
+        h1 {
             text-align: center;
+            color: #333;
+        }
+        .fact-container {
+            max-width: 600px;
+            margin: 0 auto;
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
+        .fact {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 4px solid #007BFF;
+            background: #f9f9f9;
+        }
         button {
-            padding: 10px 20px;
-            margin-top: 20px;
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
             border: none;
             border-radius: 5px;
             background-color: #007BFF;
             color: white;
-            cursor: pointer;
+            transition: background-color 0.3s;
         }
-
         button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div id="app">
-       <h1> Amazing Travel Facts!</h1>
-        <div id="fact"></div>
-        <button id="newFactBtn">Get a New Fact</button>
-    </div>
+    <h1>Historical Facts</h1>
+    <div class="fact-container" id="factContainer"></div>
+    <button id="nextFactButton">Show Next Fact</button>
+
     <script>
         const facts = [
-            "The Great Wall of China is over 13,000 miles long.",
-            "Venice is built on a network of canals.",
-            "Antarctica is the driest, windiest, and coldest continent.",
-            "The Eiffel Tower can be 15 cm taller during the summer.",
-            "Mount Everest grows about 4 mm every year.",
-            "The Amazon Rainforest produces 20% of the world's oxygen.",
-            "There are more stars in the universe than grains of sand on Earth.",
-            "Honey never spoils; archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still edible.",
-            "Bananas are berries, but strawberries are not.",
-            "Octopuses have three hearts."
+            {
+                "fact": "The Great Pyramid of Giza",
+                "description": "Built around 2580–2560 BC, it is the oldest of the Seven Wonders of the Ancient World and the only one to remain largely intact."
+            },
+            {
+                "fact": "The Roman Empire",
+                "description": "At its height, the Roman Empire covered approximately 2.3 million square miles and included parts of Europe, North Africa, and the Middle East."
+            },
+            {
+                "fact": "The Black Death",
+                "description": "This devastating pandemic swept through Europe from 1347 to 1351, killing an estimated 25 million people, which was about one-third of Europe's population at the time."
+            },
+            {
+                "fact": "The Declaration of Independence",
+                "description": "Adopted on July 4, 1776, it announced the separation of 13 North American British colonies from Great Britain."
+            },
+            {
+                "fact": "The Industrial Revolution",
+                "description": "Beginning in the late 18th century, this period marked a major turning point in history, with the transition to new manufacturing processes and the rise of factories."
+            },
+            {
+                "fact": "The Fall of the Berlin Wall",
+                "description": "On November 9, 1989, the Berlin Wall fell, symbolizing the end of the Cold War and the division between East and West Germany."
+            },
+            {
+                "fact": "The First Moon Landing",
+                "description": "On July 20, 1969, Apollo 11 astronauts Neil Armstrong and Buzz Aldrin became the first humans to set foot on the moon."
+            },
+            {
+                "fact": "The Invention of the Printing Press",
+                "description": "Johannes Gutenberg invented the movable-type printing press around 1440, revolutionizing the way information was disseminated and contributing to the spread of literacy."
+            },
+            {
+                "fact": "The American Civil War",
+                "description": "Fought from 1861 to 1865, this conflict was primarily over the issues of slavery and states' rights, leading to the abolition of slavery in the United States."
+            },
+            {
+                "fact": "The Renaissance",
+                "description": "This cultural movement began in Italy in the 14th century and marked a period of renewed interest in art, science, and the classical knowledge of ancient Greece and Rome."
+            },
+            {
+                "fact": "The Suffragette Movement",
+                "description": "This movement in the late 19th and early 20th centuries fought for women's right to vote, leading to significant changes in many countries, including the U.S. in 1920."
+            },
+            {
+                "fact": "The Cold War",
+                "description": "A period of geopolitical tension between the Soviet Union and the United States from the end of World War II until the early 1990s, characterized by political conflict, military tension, and proxy wars."
+            },
+            {
+                "fact": "The Discovery of America",
+                "description": "Christopher Columbus reached the Americas on October 12, 1492, although he believed he had found a new route to Asia."
+            },
+            {
+                "fact": "The French Revolution",
+                "description": "Beginning in 1789, this period of social and political upheaval in France led to the rise of democracy and the decline of monarchies in Europe."
+            },
+            {
+                "fact": "The Civil Rights Movement",
+                "description": "This movement in the United States during the 1950s and 1960s aimed to end racial segregation and discrimination against African Americans, leading to significant legislative changes."
+            }
         ];
 
-        const factElement = document.getElementById('fact');
-        const newFactBtn = document.getElementById('newFactBtn');
+        let currentFactIndex = 0;
 
-        function displayRandomFact() {
-            const randomIndex = Math.floor(Math.random() * facts.length);
-            factElement.textContent = facts[randomIndex];
+        function displayFact(index) {
+            const factContainer = document.getElementById('factContainer');
+            factContainer.innerHTML = `
+                <div class="fact">
+                    <h2>${facts[index].fact}</h2>
+                    <p>${facts[index].description}</p>
+                </div>
+            `;
         }
 
-        // Display a fact when the page loads
-        displayRandomFact();
+        document.getElementById('nextFactButton').addEventListener('click', () => {
+            currentFactIndex = (currentFactIndex + 1) % facts.length;
+            displayFact(currentFactIndex);
+        });
 
-        // Add event listener to button
-        newFactBtn.addEventListener('click', displayRandomFact);
+        // Display the first fact on page load
+        displayFact(currentFactIndex);
     </script>
 </body>
 </html>
